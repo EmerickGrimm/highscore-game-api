@@ -1,7 +1,8 @@
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 
-dotenv.config({ path: require('path').resolve(__dirname, '.env') });
+// Hardcoding the path to the `.env` file
+dotenv.config({ path: 'highscore-game-api/.env' });
 
 const db = mysql.createConnection({
     host: process.env.DB_HOST,         
@@ -9,7 +10,6 @@ const db = mysql.createConnection({
     password: process.env.DB_PASSWORD, 
     database: process.env.DB_NAME      
 });
-
 
 db.connect((err) => {
     if (err) {
