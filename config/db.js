@@ -1,22 +1,21 @@
 const mysql = require('mysql2');
 const dotenv = require('dotenv');
 
-// Hardcoding the path to the `.env` file
-dotenv.config({ path: 'highscore-game-api/.env' });
+// Load environment variables from .env file
+dotenv.config({ path: '/root/highscore-game-api/.env' });
 
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,         
-    user: process.env.DB_USER,        
-    password: process.env.DB_PASSWORD, 
-    database: process.env.DB_NAME      
+// Create a connection pool
+const pool = mysql.createPool({
+    host: process.env.DB_HOST,
+    user: process.env.DB_USER,
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME,
+    waitForConnections: true,
+    connectionLimit: 10, // Set a limit to the pool size
+    queueLimit: 0
 });
 
-db.connect((err) => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-        process.exit();
-    }
-    console.log('Connected to the database');
-});
+// Get a promise-based interface for the pool
+const promisePool = pool.promise();
 
-module.exports = db;
+module.exports = promisePool;
